@@ -4,9 +4,12 @@ var path = require("path");
 var cookieParser = require("cookie-parser");
 var logger = require("morgan");
 const database = require("./database/models/index");
+const session = require("express-session");
+const flash = require("connect-flash");
 
 var indexRouter = require("./routes/index");
 var usersRouter = require("./routes/users");
+require("dotenv").config();
 
 var app = express();
 
@@ -22,6 +25,14 @@ app.use(express.static(path.join(__dirname, "public")));
 
 app.use("/", indexRouter);
 app.use("/users", usersRouter);
+app.use(
+  session({
+    secret: "tienbaodeptrai",
+    resave: false,
+    saveUninitialized: true,
+  })
+);
+app.use(flash());
 
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {
