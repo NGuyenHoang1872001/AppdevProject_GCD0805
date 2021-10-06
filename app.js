@@ -10,7 +10,7 @@ const flash = require("connect-flash");
 var indexRouter = require("./routes/index");
 var usersRouter = require("./routes/users");
 require("dotenv").config();
-
+var adminRouter = require("./routes/admin");
 var app = express();
 
 // view engine setup
@@ -25,6 +25,7 @@ app.use(express.static(path.join(__dirname, "public")));
 
 app.use("/", indexRouter);
 app.use("/users", usersRouter);
+app.use("/admin", adminRouter);
 app.use(
   session({
     secret: "tienbaodeptrai",
