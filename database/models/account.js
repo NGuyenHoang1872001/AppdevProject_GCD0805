@@ -9,14 +9,18 @@ module.exports = (sequelize, DataTypes) => {
      */
     static associate(models) {
       // define association here
+      Account.belongsTo(models.Role, {
+        foreignKey: "roleId",
+        onDelete: "CASCADE",
+      });
     }
   }
   Account.init(
     {
       username: DataTypes.STRING,
       password: DataTypes.STRING,
-      roldeId: DataTypes.INTERGER,
-      userId: DataTypes.INTERGER,
+      roleId: DataTypes.INTEGER,
+      userId: DataTypes.INTEGER,
     },
     {
       sequelize,
