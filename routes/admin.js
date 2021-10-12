@@ -269,7 +269,7 @@ router.post("/addTrainee", async function (req, res, next) {
       });
       req.flash(
         "successFlashMessage",
-        `Create training staff ${trainee.name} successfully`
+        `Create trainee ${trainee.name} successfully`
       );
     }
     res.redirect("/admin/trainee");
