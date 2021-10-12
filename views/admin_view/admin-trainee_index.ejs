@@ -1,0 +1,70 @@
+<div class="container-fluid">
+    <div class="card shadow mb-4">
+      <div class="card-header py-3">
+        <h6 class="m-0 font-weight-bold text-primary">Trainee</h6>
+      </div>
+      <div class="card-body">
+        <a href="/admin/createTrainee">
+          <button type="button" class="btn btn-primary btn-sm">
+            <i class="fas fa-plus-circle"></i> Create Trainee
+          </button>
+        </a>
+        <div class="table-responsive">
+          <table
+            class="table table-bordered"
+            id="dataTable"
+            width="100%"
+            cellspacing="0"
+          >
+            <thead>
+              <tr>
+                <th scope="col">ID</th>
+                <th scope="col">Name</th>
+                <th scope="col">Age</th>
+                <th scope="col">Email</th>
+                <th scope="col">Address</th>
+                <th scope="col">Date Of Birth</th>
+                <th scope="col">Education</th>
+                <th scope="col">Created At</th>
+                <th scope="col">Updated At</th>
+                <th scope="col">Action</th>
+              </tr>
+            </thead>
+            <tbody>
+              <% trainees.forEach(function(trainee) { %>
+              <tr>
+                <th scope="row"><%= trainee.id %></th>
+                <td><%= trainee.name %></td>
+                <td><%= trainee.age %></td>
+                <td><%= trainee.email %></td>
+                <td><%= trainee.address %></td>
+                <td><%= trainee.dateofbirth %></td>
+                <td><%= trainee.education %></td>
+                <td><%= trainee.createdAt %></td>
+                <td><%= trainee.updatedAt %></td>
+  
+                <td>
+                  <div>
+                    <a href="">
+                      <button type="button" class="btn btn-primary btn-sm">
+                        <i class="fas fa-user-edit"></i> Update
+                      </button>
+                    </a>
+                  </div>
+                  <div>
+                    <a href="">
+                      <button type="button" class="btn btn-secondary btn-sm">
+                        <i class="fas fa-user-minus"></i> Delete
+                      </button>
+                    </a>
+                  </div>
+                </td>
+              </tr>
+              <% }); %>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+  

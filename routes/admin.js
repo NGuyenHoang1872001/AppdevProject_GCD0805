@@ -7,7 +7,7 @@ const Staff = database.db.Staff;
 const Role = database.db.Role;
 const Account = database.db.Account;
 const Trainer = database.db.Trainer;
-
+const Trainee = database.db.Trainee;
 /* GET Admin Index page. */
 router.get("/", async function (req, res, next) {
   try {
@@ -44,6 +44,21 @@ router.get("/trainer", async function (req, res, next) {
     res.render("layouts/master", {
       content: "../admin_view/admin-trainer_index",
       trainers: trainers,
+      successFlashMessage: req.flash("successFlashMessage"),
+      errorFlashMessage: req.flash("errorFlashMessage"),
+    });
+  } catch (error) {
+    console.log(error);
+  }
+});
+
+/* GET Admin-Trainee index page. */
+router.get("/trainee", async function (req, res, next) {
+  try {
+    const trainees = await Trainee.findAll();
+    res.render("layouts/master", {
+      content: "../admin_view/admin-trainee_index",
+      trainees: trainees,
       successFlashMessage: req.flash("successFlashMessage"),
       errorFlashMessage: req.flash("errorFlashMessage"),
     });
@@ -204,4 +219,64 @@ router.post("/addTrainer", async function (req, res, next) {
   }
 });
 
+/* ======================== TRAINEE================================= */
+
+/* GET create Trainee page. */
+
+router.get("/createTrainee", async function (req, res, next) {
+  const role = await Role.findOne({
+    where: {
+      name: "trainee",
+    },
+  });
+  res.render("layouts/master", {
+    role: role,
+    content: "../trainee_view/createTrainee",
+    successFlashMessage: req.flash("successFlashMessage"),
+    errorFlashMessage: req.flash("errorFlashMessage"),
+  });
+});
+
+/* POST add Trainer page. */
+
+router.post("/addTrainee", async function (req, res, next) {
+  const {
+    username,
+    password,
+    name,
+    age,
+    email,
+    address,
+    dateofbirth,
+    education,
+    roleId,
+  } = req.body;
+  try {
+    const trainee = await Trainee.create({
+      name: name,
+      age: age,
+      email: email,
+      address: address,
+      dateofbirth: dateofbirth,
+      education: education,
+    });
+    if (trainee) {
+      await Account.create({
+        username: username,
+        password,
+        roleId,
+        userId: trainee.dataValues.id,
+      });
+      req.flash(
+        "successFlashMessage",
+        `Create training staff ${trainee.name} successfully`
+      );
+    }
+    res.redirect("/admin/trainee");
+  } catch (error) {
+    req.flash("errorFlashMessage", error);
+    console.log(session);
+    console.log(error);
+  }
+});
 module.exports = router;
