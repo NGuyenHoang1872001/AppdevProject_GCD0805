@@ -10,6 +10,7 @@ const flash = require("connect-flash");
 var indexRouter = require("./routes/index");
 var usersRouter = require("./routes/users");
 var adminRouter = require("./routes/admin");
+var staffRouter = require("./routes/staff");
 
 require("dotenv").config();
 
@@ -36,6 +37,7 @@ app.use(flash());
 app.use("/", indexRouter);
 app.use("/users", usersRouter);
 app.use("/admin", adminRouter);
+app.use("/staff", staffRouter);
 
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {
