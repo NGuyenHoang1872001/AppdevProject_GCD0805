@@ -125,7 +125,7 @@ router.get("/staffAccount", async function (req, res) {
   }
 });
 
-/* Get Admin-staffAccount index page. */
+/* Get Admin-trainerAccount index page. */
 
 router.get("/trainerAccount", async function (req, res) {
   try {
