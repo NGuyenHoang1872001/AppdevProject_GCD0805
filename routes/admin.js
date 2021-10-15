@@ -101,40 +101,45 @@ router.post("/addStaff", async function (req, res, next) {
   }
 });
 
-/* GET Delete Training Staff . */
-// router.get("/deleteStaff/:deletedId", async function (req, res, next) {
-//   // Delete Trainer base on ID
-//   const { deletedId } = req.params;
-//   try {
-//     const deletedStaff = await Staff.destroy({
-//       where: {
-//         id: deletedId,
-//       },
-//     });
-//     if (deletedStaff) {
-//       req.flash("successFlashMessage", `Delete staff successfully`);
-//       res.redirect("/admin/staff");
-//     }
-//     req.flash("errorFlashMessage", `Delete staff failed`);
-//     res.redirect("/admin/staff");
-//   } catch (error) {
-//     console.log(error);
-//   }
-// });
-
 /* ======================== TRAINER/TRAINING STAFF ACCOUNT ================================= */
 
-/* Get account index page. */
+/* Get Admin-staffAccount index page. */
 
-router.get("/account", async function (req, res) {
+router.get("/staffAccount", async function (req, res) {
   try {
     const accounts = await Account.findAll({
       include: Role,
     });
-    console.log("🚀 ~ file: admin.js ~ line 95 ~ accounts", accounts);
+    const staffAccounts = accounts.filter(
+      (account) => account.Role.name === "trainingStaff"
+    );
+
     res.render("layouts/master", {
-      content: "../account_view/account_index",
-      accounts: accounts,
+      staffAccounts: staffAccounts,
+      content: "../account_view/staffAccount_index",
+      successFlashMessage: req.flash("successFlashMessage"),
+      errorFlashMessage: req.flash("errorFlashMessage"),
+    });
+  } catch (error) {
+    console.log(error);
+  }
+});
+
+/* Get Admin-trainerAccount index page. */
+
+router.get("/trainerAccount", async function (req, res) {
+  try {
+    const accounts = await Account.findAll({
+      include: Role,
+    });
+
+    const trainerAccounts = accounts.filter(
+      (account) => account.Role.name === "trainer"
+    );
+
+    res.render("layouts/master", {
+      trainerAccounts: trainerAccounts,
+      content: "../account_view/trainerAccount_index",
       successFlashMessage: req.flash("successFlashMessage"),
       errorFlashMessage: req.flash("errorFlashMessage"),
     });
