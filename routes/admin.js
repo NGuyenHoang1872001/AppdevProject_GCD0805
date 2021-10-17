@@ -37,6 +37,52 @@ router.get("/staff", async function (req, res, next) {
   }
 });
 
+/*Get Home page. */
+const getuserByRole = async (roleName, userId) => {
+  let user;
+  switch (roleName) {
+    case "trainingStaff": {
+      user = await Staff.findOne({
+        where: {
+          id: userId,
+        },
+      });
+      return user;
+    }
+
+    case "trainer": {
+      await Trainer.findOne({
+        where: {
+          id: userId,
+        },
+      });
+      return user;
+    }
+    default: {
+      res.send("error");
+    }
+  }
+};
+
+/*Get Home page. */
+router.get("/viewAccount", async function (req, res, next) {
+  try {
+    const { id } = req.query;
+
+    const account = await Account.findOne({
+      where: {
+        id,
+      },
+      include: Role,
+    });
+    const user = await getuserByRole(account.Role.name, account.userId);
+    const accountDetail = { ...account.dataValues, User: user };
+    res.send(accountDetail);
+  } catch (error) {
+    console.log(error);
+  }
+});
+
 /* GET Admin-Trainer index page. */
 router.get("/trainer", async function (req, res, next) {
   try {
