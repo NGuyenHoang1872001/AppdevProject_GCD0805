@@ -36,8 +36,8 @@
               <td>
                 <div>
                   <a href="/admin/viewAccount?id=<%= staffAccount.id %> ">
-                    <button type="button" class="btn btn-primary btn-sm">
-                      <i class="fas fa-user-edit"></i> View
+                    <button type="button" class="btn btn-warning btn-sm">
+                      <i class="fas fa-user-edit"></i> View Detail
                     </button>
                   </a>
                 </div>
@@ -50,7 +50,7 @@
                   </a>
                 </div>
                 <div>
-                  <a href="">
+                  <a href="/admin/deleteStaffAccount?id=<%= staffAccount.id %>">
                     <button type="button" class="btn btn-secondary btn-sm">
                       <i class="fas fa-user-minus"></i> Delete
                     </button>
