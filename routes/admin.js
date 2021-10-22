@@ -151,7 +151,7 @@ const deteleUserByRole = async (roleName, userId) => {
     }
 
     case "trainer": {
-      await Trainer.findOne({
+      await Trainer.destroy({
         where: {
           id: userId,
         },
@@ -304,6 +304,28 @@ router.post("/addTrainer", async function (req, res, next) {
   } catch (error) {
     req.flash("errorFlashMessage", error);
     console.log(session);
+    console.log(error);
+  }
+});
+
+router.get("/deleteTrainerAccount", async function (req, res) {
+  try {
+    const { id } = req.query;
+    const account = await getAccountById(id);
+    console.log("🚀 ~ file: admin.js ~ line 315 ~ account", account);
+
+    const result = await deteleUserByRole(account.Role.name, account.userId);
+    await Account.destroy({
+      where: {
+        id,
+      },
+    });
+
+    result
+      ? req.flash("successFlashMessage", `Delete Trainer successfully`)
+      : req.flash("errorFlashMessage", `Delete Trainer failed`);
+    res.redirect("/admin/trainerAccount");
+  } catch (error) {
     console.log(error);
   }
 });
