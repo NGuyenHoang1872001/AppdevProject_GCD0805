@@ -68,6 +68,75 @@ router.get("/category", async function (req, res, next) {
     console.log(error);
   }
 });
+/* ===================================== Account ===================================== */
+
+const getuserByRole = async (roleName, userId) => {
+  let user;
+  switch (roleName) {
+    case "trainee": {
+      user = await Trainee.findOne({
+        where: {
+          id: userId,
+        },
+      });
+      return user;
+    }
+
+    default: {
+      res.send("error");
+    }
+  }
+};
+
+const getAccountById = async (accountId) => {
+  const account = await Account.findOne({
+    where: {
+      id: accountId,
+    },
+    include: Role,
+  });
+  return account;
+};
+
+const deteleUserByRole = async (roleName, userId) => {
+  let result;
+  switch (roleName) {
+    case "trainee": {
+      result = await Trainee.destroy({
+        where: {
+          id: userId,
+        },
+      });
+      return result;
+    }
+    default: {
+      res.send("error");
+    }
+  }
+};
+
+/* View Trainee Account. */
+router.get("/traineeAccount", async function (req, res) {
+  try {
+    const accounts = await Account.findAll({
+      include: Role,
+    });
+
+    const traineeAccounts = accounts.filter(
+      (account) => account.Role.name === "trainee"
+    );
+
+    res.render("layouts/master", {
+      traineeAccounts: traineeAccounts,
+      content: "../account_view/traineeAccount_index",
+      successFlashMessage: req.flash("successFlashMessage"),
+      errorFlashMessage: req.flash("errorFlashMessage"),
+    });
+  } catch (error) {
+    console.log(error);
+  }
+});
+
 /* ===================================== Trainee ===================================== */
 
 /* GET create Trainer page. */
@@ -337,4 +406,25 @@ router.post("/editCategory", async function (req, res, next) {
     console.log(error);
   }
 });
+
+router.get("/deleteTraineeAccount", async function (req, res) {
+  try {
+    const { id } = req.query;
+    const account = await getAccountById(id);
+    const result = await deteleUserByRole(account.Role.name, account.userId);
+    await Account.destroy({
+      where: {
+        id,
+      },
+    });
+
+    result
+      ? req.flash("successFlashMessage", `Delete Trainee  successfully`)
+      : req.flash("errorFlashMessage", `Delete Trainee failed`);
+    res.redirect("/staff/traineeAccount");
+  } catch (error) {
+    console.log(error);
+  }
+});
+
 module.exports = router;
