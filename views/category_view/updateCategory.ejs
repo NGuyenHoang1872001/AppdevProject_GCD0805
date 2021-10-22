@@ -1,0 +1,53 @@
+<!-- Begin Page Content -->
+<body>
+  <div class="container">
+    <h1>Welcome to Course Category updating page</h1>
+    <form action="/staff/editCategory" method="POST">
+      <div class="mb-3">
+        <label for="exampleInputEmail1" class="form-label">ID</label>
+        <input
+          type="text"
+          class="form-control"
+          id="exampleInputEmail1"
+          aria-describedby="emailHelp"
+          value="<%= id %>"
+          name="id"
+          readonly
+        />
+        <!-- <div id="emailHelp" class="form-text">We'll never share your email with anyone else.</div> -->
+      </div>
+
+      <div class="mb-3">
+        <label for="exampleInputEmail1" class="form-label">Name</label>
+        <input
+          type="text"
+          class="form-control"
+          id="exampleInputEmail1"
+          aria-describedby="emailHelp"
+          value="<%= name %>"
+          name="name"
+        />
+      </div>
+      <div class="mb-3">
+        <label for="exampleInputPassword1" class="form-label"
+          >Descriptions</label
+        >
+        <input
+          type="text"
+          class="form-control"
+          id="exampleInputPassword1"
+          value="<%= descriptions %>"
+          name="descriptions"
+        />
+      </div>
+      <button type="submit" class="btn btn-primary">
+        <i class="fas fa-user-edit"></i> Update
+      </button>
+      <a href="/staff/category">
+        <button type="button" class="btn btn-secondary">
+          <i class="fas fa-times-circle"></i> Cancel
+        </button>
+      </a>
+    </form>
+  </div>
+</body>
