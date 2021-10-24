@@ -2,7 +2,6 @@ var express = require("express");
 const session = require("express-session");
 var router = express.Router();
 const database = require("../database/models/index");
-console.log("🚀 ~ file: staff.js ~ line 5 ~ database", database);
 const Role = database.db.Role;
 const Account = database.db.Account;
 const Trainee = database.db.Trainee;
@@ -10,6 +9,7 @@ const Trainer = database.db.Trainer;
 const Course = database.db.Course;
 const Course_Category = database.db.Category;
 const TrainerCourse = database.db.TrainerCourse;
+const TraineeCourse = database.db.TraineeCourse;
 
 /* GET Staff Index page. */
 router.get("/", async function (req, res, next) {
@@ -81,6 +81,23 @@ router.get("/trainerCourse", async function (req, res, next) {
     res.render("layouts/master", {
       content: "../trainerCourse_view/trainerCourse_index",
       trainerCourses: trainerCourses,
+      successFlashMessage: req.flash("successFlashMessage"),
+      errorFlashMessage: req.flash("errorFlashMessage"),
+    });
+  } catch (error) {
+    console.log(error);
+  }
+});
+
+/* GET TraineeCourse index page. */
+router.get("/traineeCourse", async function (req, res, next) {
+  try {
+    const traineeCourses = await TraineeCourse.findAll({
+      include: [Trainee, Course],
+    });
+    res.render("layouts/master", {
+      content: "../traineeCourse_view/traineeCourse_index",
+      traineeCourses: traineeCourses,
       successFlashMessage: req.flash("successFlashMessage"),
       errorFlashMessage: req.flash("errorFlashMessage"),
     });
@@ -472,6 +489,36 @@ router.post("/assignTrainer", async (req, res) => {
       courseId,
     });
     res.redirect("/staff/trainerCourse");
+  } catch (error) {
+    console.log(error);
+  }
+});
+
+/* ===================================== Assign Trainee ===================================== */
+router.get("/assignTrainee", async (req, res) => {
+  try {
+    const trainees = await Trainee.findAll();
+    const courses = await Course.findAll();
+    res.render("layouts/master", {
+      content: "../trainee_view/assignTrainee",
+      trainees,
+      courses,
+      successFlashMessage: req.flash("successFlashMessage"),
+      errorFlashMessage: req.flash("errorFlashMessage"),
+    });
+  } catch (error) {
+    console.log(error);
+  }
+});
+
+router.post("/assignTrainee", async (req, res) => {
+  try {
+    const { traineeId, courseId } = req.body;
+    const result = await TraineeCourse.create({
+      traineeId,
+      courseId,
+    });
+    res.redirect("/staff/traineeCourse");
   } catch (error) {
     console.log(error);
   }
