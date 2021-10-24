@@ -2,11 +2,14 @@ var express = require("express");
 const session = require("express-session");
 var router = express.Router();
 const database = require("../database/models/index");
+console.log("🚀 ~ file: staff.js ~ line 5 ~ database", database);
 const Role = database.db.Role;
 const Account = database.db.Account;
 const Trainee = database.db.Trainee;
+const Trainer = database.db.Trainer;
 const Course = database.db.Course;
 const Course_Category = database.db.Category;
+const TrainerCourse = database.db.TrainerCourse;
 
 /* GET Staff Index page. */
 router.get("/", async function (req, res, next) {
@@ -61,6 +64,23 @@ router.get("/category", async function (req, res, next) {
     res.render("layouts/master", {
       content: "../staff_view/staff-category_index",
       categories: categories,
+      successFlashMessage: req.flash("successFlashMessage"),
+      errorFlashMessage: req.flash("errorFlashMessage"),
+    });
+  } catch (error) {
+    console.log(error);
+  }
+});
+
+/* GET TrainerCourse index page. */
+router.get("/trainerCourse", async function (req, res, next) {
+  try {
+    const trainerCourses = await TrainerCourse.findAll({
+      include: [Trainer, Course],
+    });
+    res.render("layouts/master", {
+      content: "../trainerCourse_view/trainerCourse_index",
+      trainerCourses: trainerCourses,
       successFlashMessage: req.flash("successFlashMessage"),
       errorFlashMessage: req.flash("errorFlashMessage"),
     });
@@ -422,6 +442,36 @@ router.get("/deleteTraineeAccount", async function (req, res) {
       ? req.flash("successFlashMessage", `Delete Trainee  successfully`)
       : req.flash("errorFlashMessage", `Delete Trainee failed`);
     res.redirect("/staff/traineeAccount");
+  } catch (error) {
+    console.log(error);
+  }
+});
+
+/* ===================================== Assign Trainer ===================================== */
+router.get("/assignTrainer", async (req, res) => {
+  try {
+    const trainers = await Trainer.findAll();
+    const courses = await Course.findAll();
+    res.render("layouts/master", {
+      content: "../trainer_view/assignTrainer",
+      trainers,
+      courses,
+      successFlashMessage: req.flash("successFlashMessage"),
+      errorFlashMessage: req.flash("errorFlashMessage"),
+    });
+  } catch (error) {
+    console.log(error);
+  }
+});
+
+router.post("/assignTrainer", async (req, res) => {
+  try {
+    const { trainerId, courseId } = req.body;
+    const result = await TrainerCourse.create({
+      trainerId,
+      courseId,
+    });
+    res.redirect("/staff/trainerCourse");
   } catch (error) {
     console.log(error);
   }

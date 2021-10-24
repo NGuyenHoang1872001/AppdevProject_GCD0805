@@ -13,6 +13,10 @@ module.exports = (sequelize, DataTypes) => {
         foreignKey: "categoryId",
         onDelete: "CASCADE",
       });
+      Course.hasMany(models.TrainerCourse, {
+        foreignKey: "courseId",
+        as: "courseId",
+      });
     }
   }
   Course.init(
