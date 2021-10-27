@@ -22,7 +22,9 @@
               <th scope="col">username</th>
               <th scope="col">Created At</th>
               <th scope="col">Updated At</th>
-              <th scope="col">Action</th>
+              <th scope="col">Details</th>
+              <th scope="col">Update</th>
+              <th scope="col">Delete</th>
             </tr>
           </thead>
           <tbody>
@@ -37,18 +39,21 @@
                 <div>
                   <a href="/admin/viewAccount?id=<%= staffAccount.id %> ">
                     <button type="button" class="btn btn-warning btn-sm">
-                      <i class="fas fa-user-edit"></i> View Detail
+                      <i class="fas fa-user-tag"></i> View
                     </button>
                   </a>
                 </div>
-
+              </td>
+              <td>
                 <div>
-                  <a href="">
+                  <a href="/admin/updateStaff/<%= staffAccount.id %>">
                     <button type="button" class="btn btn-primary btn-sm">
                       <i class="fas fa-user-edit"></i> Update
                     </button>
                   </a>
                 </div>
+              </td>
+              <td>
                 <div>
                   <a href="/admin/deleteStaffAccount?id=<%= staffAccount.id %>">
                     <button type="button" class="btn btn-secondary btn-sm">

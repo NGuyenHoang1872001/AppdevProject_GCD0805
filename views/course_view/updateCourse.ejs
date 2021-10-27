@@ -40,10 +40,24 @@
           name="descriptions"
         />
       </div>
+      <div class="mb-3">
+        <div class="form-group">
+          <label for="exampleFormControlSelect1">Course Category</label>
+          <select
+            class="form-control"
+            id="exampleFormControlSelect1"
+            name="categoryId"
+          >
+            <% categories.forEach(function(category) { %>
+            <option value="<%= category.id %>"><%= category.name %></option>
+            <% }); %>
+          </select>
+        </div>
+      </div>
       <button type="submit" class="btn btn-primary">
         <i class="fas fa-user-edit"></i> Update
       </button>
-      <a href="/staff">
+      <a href="/staff/course">
         <button type="button" class="btn btn-secondary">
           <i class="fas fa-times-circle"></i> Cancel
         </button>

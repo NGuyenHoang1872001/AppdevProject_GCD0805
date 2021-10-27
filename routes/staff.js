@@ -2,6 +2,7 @@ var express = require("express");
 const session = require("express-session");
 var router = express.Router();
 const database = require("../database/models/index");
+const { Op } = require("sequelize");
 const Role = database.db.Role;
 const Account = database.db.Account;
 const Trainee = database.db.Trainee;
@@ -176,7 +177,7 @@ router.get("/traineeAccount", async function (req, res) {
 
 /* ===================================== Trainee ===================================== */
 
-/* GET create Trainer page. */
+/* GET create Trainee page. */
 
 router.get("/createTrainee", async function (req, res, next) {
   const role = await Role.findOne({
@@ -194,7 +195,7 @@ router.get("/createTrainee", async function (req, res, next) {
   });
 });
 
-/* POST add Trainer page. */
+/* POST add Trainee page. */
 
 router.post("/addTrainee", async function (req, res, next) {
   const {
@@ -233,6 +234,91 @@ router.post("/addTrainee", async function (req, res, next) {
   } catch (error) {
     req.flash("errorFlashMessage", error);
     console.log(session);
+    console.log(error);
+  }
+});
+
+router.get("/updateTrainee/:updatedId", async function (req, res) {
+  try {
+    const { updatedId } = req.params;
+    // const account = await Account.findAll();
+    const trainee = await Trainee.findOne({
+      where: {
+        id: updatedId,
+      },
+    });
+    console.log("🚀 ~ file: staff.js ~ line 250 ~ trainee", trainee);
+
+    const traineeAccount = await Account.findOne({
+      include: [
+        {
+          model: Role,
+          where: {
+            name: "trainee",
+          },
+        },
+      ],
+      where: {
+        userId: trainee.id,
+      },
+    });
+
+    const data = { ...trainee, Account: traineeAccount };
+
+    res.send(data);
+
+    // res.render('layouts/master', {
+    //   content: "../trainee_view/updateTrainee",
+    //   data
+    // })
+  } catch (error) {
+    console.log(error);
+  }
+});
+
+router.post("/editTrainee", async function (req, res, next) {
+  const {
+    id,
+    username,
+    password,
+    name,
+    age,
+    email,
+    dateofbirth,
+    education,
+    createedAt,
+    updatedAt,
+  } = req.body;
+  try {
+    const updatedTrainee = await Trainee.update(
+      {
+        name,
+        age,
+        email,
+        dateofbirth,
+        education,
+        createedAt,
+        updatedAt,
+      },
+      {
+        where: {
+          id: id,
+        },
+      }
+    );
+
+    if (updatedTrainee) {
+      await Account.update({
+        username,
+        password,
+      });
+      req.flash("successFlashMessage", `Update Trainee successfully`);
+      res.redirect("/staff/trainee");
+    }
+    req.flash("errorFlashMessage", `Update Trainee failed`);
+    res.redirect("/staff/trainee");
+  } catch (error) {
+    req.flash("errorFlashMessage", error);
     console.log(error);
   }
 });
@@ -297,6 +383,7 @@ router.get("/deleteCourse/:deletedId", async function (req, res, next) {
 router.get("/updateCourse/:updatedId", async function (req, res, next) {
   const { updatedId } = req.params;
   try {
+    const categories = await Course_Category.findAll();
     const course = await Course.findAll({
       where: {
         id: updatedId,
@@ -308,6 +395,7 @@ router.get("/updateCourse/:updatedId", async function (req, res, next) {
       id: id,
       name: name,
       descriptions: descriptions,
+      categories: categories,
       successFlashMessage: req.flash("successFlashMessage"),
       errorFlashMessage: req.flash("errorFlashMessage"),
     });
