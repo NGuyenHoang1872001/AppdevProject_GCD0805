@@ -175,6 +175,21 @@ router.get("/traineeAccount", async function (req, res) {
   }
 });
 
+/* GET view detail account page. */
+
+router.get("/viewAccount", async function (req, res, next) {
+  try {
+    const { id } = req.query;
+    const account = await getAccountById(id);
+
+    const user = await getuserByRole(account.Role.name, account.userId);
+    const accountDetail = { ...account.dataValues, User: user };
+    res.send(accountDetail);
+  } catch (error) {
+    console.log(error);
+  }
+});
+
 /* ===================================== Trainee ===================================== */
 
 /* GET create Trainee page. */
@@ -582,6 +597,22 @@ router.post("/assignTrainer", async (req, res) => {
   }
 });
 
+router.get("/removeTrainerCourse/:trainerId/:courseId", async (req, res) => {
+  try {
+    const { trainerId, courseId } = req.params;
+    // res.send(`trainerId: ${trainerId},courseId" ${courseId}`);
+    await TrainerCourse.destroy({
+      where: {
+        trainerId: trainerId,
+        courseId: courseId,
+      },
+    });
+    res.redirect(`/staff/trainerCourse`);
+  } catch (error) {
+    console.log("Error");
+  }
+});
+
 /* ===================================== Assign Trainee ===================================== */
 router.get("/assignTrainee", async (req, res) => {
   try {
@@ -609,6 +640,22 @@ router.post("/assignTrainee", async (req, res) => {
     res.redirect("/staff/traineeCourse");
   } catch (error) {
     console.log(error);
+  }
+});
+
+router.get("/removeTraineeCourse/:traineeId/:courseId", async (req, res) => {
+  try {
+    const { traineeId, courseId } = req.params;
+    // res.send(`trainerId: ${trainerId},courseId" ${courseId}`);
+    await TraineeCourse.destroy({
+      where: {
+        traineeId: traineeId,
+        courseId: courseId,
+      },
+    });
+    res.redirect(`/staff/traineeCourse`);
+  } catch (error) {
+    console.log("Error");
   }
 });
 
