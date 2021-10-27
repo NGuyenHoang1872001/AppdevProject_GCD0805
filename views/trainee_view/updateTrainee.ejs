@@ -13,8 +13,8 @@
         class="form-control"
         id="exampleInputEmail1"
         aria-describedby="emailHelp"
-        value="<%= id %>"
-        name="id"
+        value="<%= traineeData.id %>"
+        name="traineeId"
         readonly
       />
     </div>
@@ -25,7 +25,7 @@
         class="form-control"
         id="exampleInputEmail1"
         aria-describedby="emailHelp"
-        value="<%= account.dataValues.username %>"
+        value="<%= traineeData.username %>"
         name="username"
       />
     </div>
@@ -36,8 +36,19 @@
         class="form-control"
         id="exampleInputEmail1"
         aria-describedby="emailHelp"
-        value="<%= account.dataValues.password %>"
+        value="<%= traineeData.password %>"
         name="password"
+      />
+    </div>
+    <div class="mb-3" style="display: none">
+      <label for="exampleInputPassword1" class="form-label">Role</label>
+      <input
+        type="text"
+        class="form-control"
+        id="exampleInputPassword1"
+        name="accountId"
+        value="<%= traineeData.accountId %>"
+        required
       />
     </div>
     <div class="mb-3">
@@ -47,7 +58,7 @@
         class="form-control"
         id="exampleInputEmail1"
         aria-describedby="emailHelp"
-        value="<%= name %>"
+        value="<%= traineeData.name %>"
         name="name"
       />
     </div>
@@ -58,7 +69,7 @@
         class="form-control"
         id="exampleInputEmail1"
         aria-describedby="emailHelp"
-        value="<%= age %>"
+        value="<%= traineeData.age %>"
         name="age"
       />
     </div>
@@ -69,7 +80,7 @@
         class="form-control"
         id="exampleInputEmail1"
         aria-describedby="emailHelp"
-        value="<%= email %>"
+        value="<%= traineeData.email %>"
         name="email"
       />
 
@@ -80,7 +91,7 @@
           class="form-control"
           id="exampleInputEmail1"
           aria-describedby="emailHelp"
-          value="<%= address %>"
+          value="<%= traineeData.address %>"
           name="address"
         />
       </div>
@@ -92,7 +103,7 @@
         class="form-control"
         id="exampleInputEmail1"
         aria-describedby="emailHelp"
-        value="<%= dateofbirth %>"
+        value="<%= traineeData.dateofbirth %>"
         name="dateofbirth"
       />
     </div>
@@ -103,7 +114,7 @@
         class="form-control"
         id="exampleInputEmail1"
         aria-describedby="emailHelp"
-        value="<%= education %>"
+        value="<%= traineeData.education %>"
         name="education"
       />
     </div>

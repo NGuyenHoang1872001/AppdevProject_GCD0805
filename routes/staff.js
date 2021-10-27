@@ -278,62 +278,63 @@ router.get("/updateTrainee/:updatedId", async function (req, res) {
       },
     });
 
-    const data = { ...trainee, Account: traineeAccount };
+    const { username, password, id: accountId } = traineeAccount;
 
-    res.send(data);
+    const traineeData = {
+      ...trainee.dataValues,
+      username,
+      password,
+      accountId,
+    };
 
-    // res.render('layouts/master', {
-    //   content: "../trainee_view/updateTrainee",
-    //   data
-    // })
+    res.render("layouts/master", {
+      content: "../trainee_view/updateTrainee",
+      traineeData,
+      successFlashMessage: req.flash("successFlashMessage"),
+      errorFlashMessage: req.flash("errorFlashMessage"),
+    });
   } catch (error) {
     console.log(error);
   }
 });
 
 router.post("/editTrainee", async function (req, res, next) {
-  const {
-    id,
-    username,
-    password,
-    name,
-    age,
-    email,
-    dateofbirth,
-    education,
-    createedAt,
-    updatedAt,
-  } = req.body;
   try {
-    const updatedTrainee = await Trainee.update(
-      {
-        name,
-        age,
-        email,
-        dateofbirth,
-        education,
-        createedAt,
-        updatedAt,
-      },
+    const {
+      accountId,
+      username,
+      password,
+      traineeId,
+      name,
+      age,
+      education,
+      dateofbirth,
+      email,
+      address,
+    } = req.body;
+    const updatedAccount = await Account.update(
+      { username, password },
       {
         where: {
-          id: id,
+          id: accountId,
         },
       }
     );
-
+    const updatedTrainee = await Trainee.update(
+      { name, age, education, dateofbirth, email, address },
+      {
+        where: {
+          id: traineeId,
+        },
+      }
+    );
     if (updatedTrainee) {
-      await Account.update({
-        username,
-        password,
-      });
       req.flash("successFlashMessage", `Update Trainee successfully`);
       res.redirect("/staff/trainee");
     }
     req.flash("errorFlashMessage", `Update Trainee failed`);
     res.redirect("/staff/trainee");
   } catch (error) {
-    req.flash("errorFlashMessage", error);
     console.log(error);
   }
 });
