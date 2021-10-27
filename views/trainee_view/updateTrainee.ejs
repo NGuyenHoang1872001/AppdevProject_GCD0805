@@ -1,0 +1,133 @@
+<!-- Begin Page Content -->
+<link
+  rel="stylesheet"
+  href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.13.0/css/all.min.css"
+/>
+<h1>Update Trainee</h1>
+<div class="container">
+  <form action="/staff/editTrainee" method="POST">
+    <div class="mb-3">
+      <label for="exampleInputEmail1" class="form-label">ID</label>
+      <input
+        type="text"
+        class="form-control"
+        id="exampleInputEmail1"
+        aria-describedby="emailHelp"
+        value="<%= id %>"
+        name="id"
+        readonly
+      />
+    </div>
+    <div class="mb-3">
+      <label for="exampleInputEmail1" class="form-label">Username</label>
+      <input
+        type="text"
+        class="form-control"
+        id="exampleInputEmail1"
+        aria-describedby="emailHelp"
+        value="<%= account.dataValues.username %>"
+        name="username"
+      />
+    </div>
+    <div class="mb-3">
+      <label for="exampleInputEmail1" class="form-label">Password</label>
+      <input
+        type="text"
+        class="form-control"
+        id="exampleInputEmail1"
+        aria-describedby="emailHelp"
+        value="<%= account.dataValues.password %>"
+        name="password"
+      />
+    </div>
+    <div class="mb-3">
+      <label for="exampleInputEmail1" class="form-label">Name</label>
+      <input
+        type="text"
+        class="form-control"
+        id="exampleInputEmail1"
+        aria-describedby="emailHelp"
+        value="<%= name %>"
+        name="name"
+      />
+    </div>
+    <div class="mb-3">
+      <label for="exampleInputEmail1" class="form-label">Age</label>
+      <input
+        type="text"
+        class="form-control"
+        id="exampleInputEmail1"
+        aria-describedby="emailHelp"
+        value="<%= age %>"
+        name="age"
+      />
+    </div>
+    <div class="mb-3">
+      <label for="exampleInputEmail1" class="form-label">Email</label>
+      <input
+        type="text"
+        class="form-control"
+        id="exampleInputEmail1"
+        aria-describedby="emailHelp"
+        value="<%= email %>"
+        name="email"
+      />
+
+      <div class="mb-3">
+        <label for="exampleInputEmail1" class="form-label">Address</label>
+        <input
+          type="text"
+          class="form-control"
+          id="exampleInputEmail1"
+          aria-describedby="emailHelp"
+          value="<%= address %>"
+          name="address"
+        />
+      </div>
+    </div>
+    <div class="mb-3">
+      <label for="exampleInputEmail1" class="form-label">Date Of Birth</label>
+      <input
+        type="text"
+        class="form-control"
+        id="exampleInputEmail1"
+        aria-describedby="emailHelp"
+        value="<%= dateofbirth %>"
+        name="dateofbirth"
+      />
+    </div>
+    <div class="mb-3">
+      <label for="exampleInputEmail1" class="form-label">Education</label>
+      <input
+        type="text"
+        class="form-control"
+        id="exampleInputEmail1"
+        aria-describedby="emailHelp"
+        value="<%= education %>"
+        name="education"
+      />
+    </div>
+
+    <button type="submit" class="btn btn-primary">
+      <i class="fas fa-check-circle"></i> Update
+    </button>
+    <a href="/staff/trainee">
+      <button type="button" class="btn btn-secondary">
+        <i class="fas fa-times-circle"></i> Cancel
+      </button>
+    </a>
+  </form>
+</div>
+<script>
+  const togglePassword = document.querySelector("#togglePassword");
+  const password = document.querySelector("#id_password");
+
+  togglePassword.addEventListener("click", function (e) {
+    // toggle the type attribute
+    const type =
+      password.getAttribute("type") === "password" ? "text" : "password";
+    password.setAttribute("type", type);
+    // toggle the eye slash icon
+    this.classList.toggle("fa-eye-slash");
+  });
+</script>

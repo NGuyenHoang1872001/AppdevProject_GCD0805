@@ -100,6 +100,57 @@ router.post("/addStaff", async function (req, res, next) {
   }
 });
 
+/* GET update Training Staff page. */
+
+router.get("/updateStaff/:updatedId", async function (req, res, next) {
+  try {
+    const { updatedId } = req.params;
+    const staffAccount = await Account.findAll({
+      where: {
+        id: updatedId,
+      },
+    });
+    const { id, username, password } = staffAccount[0].dataValues;
+    console.log("🚀 ~ file: admin.js ~ line 349 ~ trainer", staffAccount);
+    res.render("layouts/master", {
+      content: "../staff_view/updateStaff",
+      id,
+      username,
+      password,
+      successFlashMessage: req.flash("successFlashMessage"),
+      errorFlashMessage: req.flash("errorFlashMessage"),
+    });
+  } catch (error) {
+    console.log(error);
+  }
+});
+
+router.post("/editStaff", async function (req, res, next) {
+  const { id, username, password } = req.body;
+  try {
+    const updatedStaff = await Account.update(
+      {
+        username,
+        password,
+      },
+      {
+        where: {
+          id: id,
+        },
+      }
+    );
+    if (updatedStaff) {
+      req.flash("successFlashMessage", `Update Staff successfully`);
+      res.redirect("/admin/staffAccount");
+    }
+    req.flash("errorFlashMessage", `Update Staff failed`);
+    res.redirect("/admin/staffAccount");
+  } catch (error) {
+    req.flash("errorFlashMessage", error);
+    console.log(error);
+  }
+});
+
 /* ======================== ACCOUNT ================================= */
 
 const getuserByRole = async (roleName, userId) => {
@@ -247,6 +298,28 @@ router.get("/deleteStaffAccount", async function (req, res) {
   }
 });
 
+router.get("/deleteTrainerAccount", async function (req, res) {
+  try {
+    const { id } = req.query;
+    const account = await getAccountById(id);
+    console.log("🚀 ~ file: admin.js ~ line 315 ~ account", account);
+
+    const result = await deteleUserByRole(account.Role.name, account.userId);
+    await Account.destroy({
+      where: {
+        id,
+      },
+    });
+
+    result
+      ? req.flash("successFlashMessage", `Delete Trainer successfully`)
+      : req.flash("errorFlashMessage", `Delete Trainer failed`);
+    res.redirect("/admin/trainerAccount");
+  } catch (error) {
+    console.log(error);
+  }
+});
+
 /* ===================================== TRAINER ===================================== */
 
 /* GET create Trainer page. */
@@ -297,7 +370,7 @@ router.post("/addTrainer", async function (req, res, next) {
       });
       req.flash(
         "successFlashMessage",
-        `Create training staff ${trainer.fullname} successfully`
+        `Create trainer ${trainer.fullname} successfully`
       );
     }
     res.redirect("/admin/trainer");
@@ -308,26 +381,54 @@ router.post("/addTrainer", async function (req, res, next) {
   }
 });
 
-router.get("/deleteTrainerAccount", async function (req, res) {
-  try {
-    const { id } = req.query;
-    const account = await getAccountById(id);
-    console.log("🚀 ~ file: admin.js ~ line 315 ~ account", account);
+/* GET update Trainer page. */
 
-    const result = await deteleUserByRole(account.Role.name, account.userId);
-    await Account.destroy({
+router.get("/updateTrainer/:updatedId", async function (req, res, next) {
+  try {
+    const { updatedId } = req.params;
+    const trainerAccount = await Account.findAll({
       where: {
-        id,
+        id: updatedId,
       },
     });
-
-    result
-      ? req.flash("successFlashMessage", `Delete Trainer successfully`)
-      : req.flash("errorFlashMessage", `Delete Trainer failed`);
-    res.redirect("/admin/trainerAccount");
+    const { id, username, password } = trainerAccount[0].dataValues;
+    console.log("🚀 ~ file: admin.js ~ line 349 ~ trainer", trainerAccount);
+    res.render("layouts/master", {
+      content: "../trainer_view/updateTrainer",
+      id,
+      username,
+      password,
+      successFlashMessage: req.flash("successFlashMessage"),
+      errorFlashMessage: req.flash("errorFlashMessage"),
+    });
   } catch (error) {
     console.log(error);
   }
 });
 
+router.post("/editTrainer", async function (req, res, next) {
+  const { id, username, password } = req.body;
+  try {
+    const updatedTrainer = await Account.update(
+      {
+        username,
+        password,
+      },
+      {
+        where: {
+          id: id,
+        },
+      }
+    );
+    if (updatedTrainer) {
+      req.flash("successFlashMessage", `Update trainer successfully`);
+      res.redirect("/admin/trainerAccount");
+    }
+    req.flash("errorFlashMessage", `Update trainer failed`);
+    res.redirect("/admin/trainerAccount");
+  } catch (error) {
+    req.flash("errorFlashMessage", error);
+    console.log(error);
+  }
+});
 module.exports = router;
