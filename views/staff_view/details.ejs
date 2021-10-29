@@ -1,0 +1,35 @@
+<div class="container-fluid">
+  <div class="card shadow mb-4">
+    <div class="card-header py-3">
+      <h6 class="m-0 font-weight-bold text-primary">Trainee details</h6>
+    </div>
+    <div class="card-body">
+      <div class="table-responsive">
+        <table class="table table-bordered" width="100%" cellspacing="0">
+          <thead>
+            <tr>
+              <th scope="col">ID</th>
+              <th scope="col">username</th>
+              <th scope="col">password</th>
+              <th scope="col">fullname</th>
+              <th scope="col">age</th>
+              <th scope="col">email</th>
+              <th scope="col">address</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <th scope="row"><%= accountDetail.id %></th>
+              <td><%= accountDetail.username %></td>
+              <td><%= accountDetail.password %></td>
+              <td><%= accountDetail.User.fullname %></td>
+              <td><%= accountDetail.User.age %></td>
+              <td><%= accountDetail.User.email %></td>
+              <td><%= accountDetail.User.address %></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>
