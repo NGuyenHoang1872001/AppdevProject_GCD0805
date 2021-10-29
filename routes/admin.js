@@ -100,226 +100,6 @@ router.post("/addStaff", async function (req, res, next) {
   }
 });
 
-/* GET update Training Staff page. */
-
-router.get("/updateStaff/:updatedId", async function (req, res, next) {
-  try {
-    const { updatedId } = req.params;
-    const staffAccount = await Account.findAll({
-      where: {
-        id: updatedId,
-      },
-    });
-    const { id, username, password } = staffAccount[0].dataValues;
-    console.log("🚀 ~ file: admin.js ~ line 349 ~ trainer", staffAccount);
-    res.render("layouts/master", {
-      content: "../staff_view/updateStaff",
-      id,
-      username,
-      password,
-      successFlashMessage: req.flash("successFlashMessage"),
-      errorFlashMessage: req.flash("errorFlashMessage"),
-    });
-  } catch (error) {
-    console.log(error);
-  }
-});
-
-router.post("/editStaff", async function (req, res, next) {
-  const { id, username, password } = req.body;
-  try {
-    const updatedStaff = await Account.update(
-      {
-        username,
-        password,
-      },
-      {
-        where: {
-          id: id,
-        },
-      }
-    );
-    if (updatedStaff) {
-      req.flash("successFlashMessage", `Update Staff successfully`);
-      res.redirect("/admin/staffAccount");
-    }
-    req.flash("errorFlashMessage", `Update Staff failed`);
-    res.redirect("/admin/staffAccount");
-  } catch (error) {
-    req.flash("errorFlashMessage", error);
-    console.log(error);
-  }
-});
-
-/* ======================== ACCOUNT ================================= */
-
-const getuserByRole = async (roleName, userId) => {
-  let user;
-  switch (roleName) {
-    case "trainingStaff": {
-      user = await Staff.findOne({
-        where: {
-          id: userId,
-        },
-      });
-      return user;
-    }
-
-    case "trainer": {
-      await Trainer.findOne({
-        where: {
-          id: userId,
-        },
-      });
-      return user;
-    }
-    default: {
-      res.send("error");
-    }
-  }
-};
-
-const getAccountById = async (accountId) => {
-  const account = await Account.findOne({
-    where: {
-      id: accountId,
-    },
-    include: Role,
-  });
-  return account;
-};
-
-const deteleUserByRole = async (roleName, userId) => {
-  let result;
-  switch (roleName) {
-    case "trainingStaff": {
-      result = await Staff.destroy({
-        where: {
-          id: userId,
-        },
-      });
-      return result;
-    }
-
-    case "trainer": {
-      await Trainer.destroy({
-        where: {
-          id: userId,
-        },
-      });
-      return result;
-    }
-    default: {
-      res.send("error");
-    }
-  }
-};
-
-/* Get Admin-staffAccount index page. */
-
-router.get("/staffAccount", async function (req, res) {
-  try {
-    const accounts = await Account.findAll({
-      include: Role,
-    });
-    const staffAccounts = accounts.filter(
-      (account) => account.Role.name === "trainingStaff"
-    );
-    console.log(req.flash("successFlashMessage"));
-
-    res.render("layouts/master", {
-      staffAccounts: staffAccounts,
-      content: "../account_view/staffAccount_index",
-      successFlashMessage: req.flash("successFlashMessage"),
-      errorFlashMessage: req.flash("errorFlashMessage"),
-    });
-  } catch (error) {
-    console.log(error);
-  }
-});
-
-/* GET Admin-trainerAccount index page. */
-
-router.get("/trainerAccount", async function (req, res) {
-  try {
-    const accounts = await Account.findAll({
-      include: Role,
-    });
-
-    const trainerAccounts = accounts.filter(
-      (account) => account.Role.name === "trainer"
-    );
-
-    res.render("layouts/master", {
-      trainerAccounts: trainerAccounts,
-      content: "../account_view/trainerAccount_index",
-      successFlashMessage: req.flash("successFlashMessage"),
-      errorFlashMessage: req.flash("errorFlashMessage"),
-    });
-  } catch (error) {
-    console.log(error);
-  }
-});
-
-/* GET view detail account page. */
-
-router.get("/viewAccount", async function (req, res, next) {
-  try {
-    const { id } = req.query;
-    const account = await getAccountById(id);
-
-    const user = await getuserByRole(account.Role.name, account.userId);
-    const accountDetail = { ...account.dataValues, User: user };
-    res.send(accountDetail);
-  } catch (error) {
-    console.log(error);
-  }
-});
-
-/* GET delete staff Account account. */
-
-router.get("/deleteStaffAccount", async function (req, res) {
-  try {
-    const { id } = req.query;
-    const account = await getAccountById(id);
-    const result = await deteleUserByRole(account.Role.name, account.userId);
-    await Account.destroy({
-      where: {
-        id,
-      },
-    });
-
-    result
-      ? req.flash("successFlashMessage", `Delete staff successfully`)
-      : req.flash("errorFlashMessage", `Delete staff failed`);
-    res.redirect("/admin/staffAccount");
-  } catch (error) {
-    console.log(error);
-  }
-});
-
-router.get("/deleteTrainerAccount", async function (req, res) {
-  try {
-    const { id } = req.query;
-    const account = await getAccountById(id);
-    console.log("🚀 ~ file: admin.js ~ line 315 ~ account", account);
-
-    const result = await deteleUserByRole(account.Role.name, account.userId);
-    await Account.destroy({
-      where: {
-        id,
-      },
-    });
-
-    result
-      ? req.flash("successFlashMessage", `Delete Trainer successfully`)
-      : req.flash("errorFlashMessage", `Delete Trainer failed`);
-    res.redirect("/admin/trainerAccount");
-  } catch (error) {
-    console.log(error);
-  }
-});
-
 /* ===================================== TRAINER ===================================== */
 
 /* GET create Trainer page. */
@@ -381,7 +161,168 @@ router.post("/addTrainer", async function (req, res, next) {
   }
 });
 
-/* GET update Trainer page. */
+/* ======================== ACCOUNT ================================= */
+
+const getuserByRole = async (roleName, userId) => {
+  let user;
+  switch (roleName) {
+    case "trainingStaff": {
+      user = await Staff.findOne({
+        where: {
+          id: userId,
+        },
+      });
+      return user;
+    }
+
+    case "trainer": {
+      user = await Trainer.findOne({
+        where: {
+          id: userId,
+        },
+      });
+      return user;
+    }
+    default: {
+      res.send("error");
+    }
+  }
+};
+
+const getAccountById = async (accountId) => {
+  const account = await Account.findOne({
+    where: {
+      id: accountId,
+    },
+    include: Role,
+  });
+  return account;
+};
+
+const deteleUserByRole = async (roleName, userId) => {
+  let result;
+  switch (roleName) {
+    case "trainingStaff": {
+      result = await Staff.destroy({
+        where: {
+          id: userId,
+        },
+      });
+      return result;
+    }
+
+    case "trainer": {
+      await Trainer.destroy({
+        where: {
+          id: userId,
+        },
+      });
+      return result;
+    }
+    default: {
+      res.send("error");
+    }
+  }
+};
+
+/* GET Admin-trainerAccount index page. */
+
+router.get("/trainerAccount", async function (req, res) {
+  try {
+    const accounts = await Account.findAll({
+      include: Role,
+    });
+
+    const trainerAccounts = accounts.filter(
+      (account) => account.Role.name === "trainer"
+    );
+
+    res.render("layouts/master", {
+      trainerAccounts: trainerAccounts,
+      content: "../account_view/trainerAccount_index",
+      successFlashMessage: req.flash("successFlashMessage"),
+      errorFlashMessage: req.flash("errorFlashMessage"),
+    });
+  } catch (error) {
+    console.log(error);
+  }
+});
+
+/* Get Admin-staffAccount index page. */
+
+router.get("/staffAccount", async function (req, res) {
+  try {
+    const accounts = await Account.findAll({
+      include: Role,
+    });
+    const staffAccounts = accounts.filter(
+      (account) => account.Role.name === "trainingStaff"
+    );
+    console.log(req.flash("successFlashMessage"));
+
+    res.render("layouts/master", {
+      staffAccounts: staffAccounts,
+      content: "../account_view/staffAccount_index",
+      successFlashMessage: req.flash("successFlashMessage"),
+      errorFlashMessage: req.flash("errorFlashMessage"),
+    });
+  } catch (error) {
+    console.log(error);
+  }
+});
+
+/* GET update Training Staff ACCOUNT page. */
+
+router.get("/updateStaff/:updatedId", async function (req, res, next) {
+  try {
+    const { updatedId } = req.params;
+    const staffAccount = await Account.findAll({
+      where: {
+        id: updatedId,
+      },
+    });
+    const { id, username, password } = staffAccount[0].dataValues;
+    console.log("🚀 ~ file: admin.js ~ line 349 ~ trainer", staffAccount);
+    res.render("layouts/master", {
+      content: "../staff_view/updateStaff",
+      id,
+      username,
+      password,
+      successFlashMessage: req.flash("successFlashMessage"),
+      errorFlashMessage: req.flash("errorFlashMessage"),
+    });
+  } catch (error) {
+    console.log(error);
+  }
+});
+
+router.post("/editStaff", async function (req, res, next) {
+  const { id, username, password } = req.body;
+  try {
+    const updatedStaff = await Account.update(
+      {
+        username,
+        password,
+      },
+      {
+        where: {
+          id: id,
+        },
+      }
+    );
+    if (updatedStaff) {
+      req.flash("successFlashMessage", `Update Staff successfully`);
+      res.redirect("/admin/staffAccount");
+    }
+    req.flash("errorFlashMessage", `Update Staff failed`);
+    res.redirect("/admin/staffAccount");
+  } catch (error) {
+    req.flash("errorFlashMessage", error);
+    console.log(error);
+  }
+});
+
+/* GET update Trainer ACCOUNT page. */
 
 router.get("/updateTrainer/:updatedId", async function (req, res, next) {
   try {
@@ -431,4 +372,94 @@ router.post("/editTrainer", async function (req, res, next) {
     console.log(error);
   }
 });
+
+/* GET view Trainer detail account page. */
+
+router.get("/viewTrainerAccount", async function (req, res, next) {
+  try {
+    const { id } = req.query;
+    const account = await getAccountById(id);
+    console.log("🚀 ~ file: admin.js ~ line 382 ~ account", account);
+
+    const user = await getuserByRole(account.Role.name, account.userId);
+
+    const accountDetail = { ...account.dataValues, User: user };
+
+    res.render("layouts/master", {
+      content: "../trainer_view/details",
+      accountDetail,
+      successFlashMessage: req.flash("successFlashMessage"),
+      errorFlashMessage: req.flash("errorFlashMessage"),
+    });
+  } catch (error) {
+    console.log(error);
+  }
+});
+
+/* GET view Staff detail account page. */
+
+router.get("/viewStaffAccount", async function (req, res, next) {
+  try {
+    const { id } = req.query;
+    const account = await getAccountById(id);
+
+    const user = await getuserByRole(account.Role.name, account.userId);
+    const accountDetail = { ...account.dataValues, User: user };
+    res.render("layouts/master", {
+      content: "../staff_view/details",
+      accountDetail,
+      successFlashMessage: req.flash("successFlashMessage"),
+      errorFlashMessage: req.flash("errorFlashMessage"),
+    });
+  } catch (error) {
+    console.log(error);
+  }
+});
+
+/* GET delete staff  account. */
+
+router.get("/deleteStaffAccount", async function (req, res) {
+  try {
+    const { id } = req.query;
+    const account = await getAccountById(id);
+    const result = await deteleUserByRole(account.Role.name, account.userId);
+    await Account.destroy({
+      where: {
+        id,
+      },
+    });
+
+    result
+      ? req.flash("successFlashMessage", `Delete staff successfully`)
+      : req.flash("errorFlashMessage", `Delete staff failed`);
+    res.redirect("/admin/staffAccount");
+  } catch (error) {
+    console.log(error);
+  }
+});
+
+/* GET delete TRAINER  account. */
+
+router.get("/deleteTrainerAccount", async function (req, res) {
+  try {
+    const { id } = req.query;
+    const account = await getAccountById(id);
+    console.log("🚀 ~ file: admin.js ~ line 315 ~ account", account);
+
+    const result = await deteleUserByRole(account.Role.name, account.userId);
+    await Account.destroy({
+      where: {
+        id,
+      },
+    });
+
+    result
+      ? req.flash("successFlashMessage", `Delete Trainer successfully`)
+      : req.flash("errorFlashMessage", `Delete Trainer failed`);
+    res.redirect("/admin/trainerAccount");
+  } catch (error) {
+    console.log(error);
+  }
+});
+
 module.exports = router;

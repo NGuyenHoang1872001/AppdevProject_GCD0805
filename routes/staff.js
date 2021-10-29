@@ -40,7 +40,7 @@ router.get("/trainee", async function (req, res, next) {
   }
 });
 
-/* GET Course index page. */
+/* GET Staff-Course index page. */
 router.get("/course", async function (req, res, next) {
   try {
     // Eager Loading - Fetch all associated data
@@ -58,7 +58,7 @@ router.get("/course", async function (req, res, next) {
   }
 });
 
-/* GET Category index page. */
+/* GET Staff-Category index page. */
 router.get("/category", async function (req, res, next) {
   try {
     const categories = await Course_Category.findAll();
@@ -183,8 +183,47 @@ router.get("/viewAccount", async function (req, res, next) {
     const account = await getAccountById(id);
 
     const user = await getuserByRole(account.Role.name, account.userId);
+
     const accountDetail = { ...account.dataValues, User: user };
-    res.send(accountDetail);
+    res.render("layouts/master", {
+      content: "../trainee_view/details",
+      accountDetail,
+      successFlashMessage: req.flash("successFlashMessage"),
+      errorFlashMessage: req.flash("errorFlashMessage"),
+    });
+  } catch (error) {
+    console.log(error);
+  }
+});
+
+router.post("/viewAccount_ajax", async function (req, res) {
+  try {
+    const { id } = req.query;
+    const account = await getAccountById(id);
+
+    const user = await getuserByRole(account.Role.name, account.userId);
+    const accountDetail = { ...account.dataValues, User: user };
+    return res.send(accountDetail);
+  } catch (error) {
+    console.log(error);
+  }
+});
+
+router.get("/deleteTraineeAccount", async function (req, res) {
+  try {
+    const { id } = req.query;
+    const account = await getAccountById(id);
+    const result = await deteleUserByRole(account.Role.name, account.userId);
+    await Account.destroy({
+      where: {
+        id,
+      },
+    });
+
+    result
+      ? req.flash("successFlashMessage", `Delete Trainee  successfully`)
+      : req.flash("errorFlashMessage", `Delete Trainee failed`);
+    res.redirect("/staff/traineeAccount");
   } catch (error) {
     console.log(error);
   }
@@ -448,7 +487,7 @@ router.post("/editCourse", async function (req, res, next) {
 
 /* ===================================== Category ===================================== */
 
-/* GET create Category */
+/* GET Create Category */
 router.get("/createCategory", function (req, res, next) {
   res.render("layouts/master", {
     content: "../category_view/createCategory",
@@ -499,7 +538,7 @@ router.get("/deleteCategory/:deletedId", async function (req, res, next) {
   }
 });
 
-/* GET update Category */
+/* GET Update Category */
 router.get("/updateCategory/:updatedId", async function (req, res, next) {
   const { updatedId } = req.params;
   try {
@@ -548,26 +587,6 @@ router.post("/editCategory", async function (req, res, next) {
   }
 });
 
-router.get("/deleteTraineeAccount", async function (req, res) {
-  try {
-    const { id } = req.query;
-    const account = await getAccountById(id);
-    const result = await deteleUserByRole(account.Role.name, account.userId);
-    await Account.destroy({
-      where: {
-        id,
-      },
-    });
-
-    result
-      ? req.flash("successFlashMessage", `Delete Trainee  successfully`)
-      : req.flash("errorFlashMessage", `Delete Trainee failed`);
-    res.redirect("/staff/traineeAccount");
-  } catch (error) {
-    console.log(error);
-  }
-});
-
 /* ===================================== Assign Trainer ===================================== */
 router.get("/assignTrainer", async (req, res) => {
   try {
@@ -592,6 +611,11 @@ router.post("/assignTrainer", async (req, res) => {
       trainerId,
       courseId,
     });
+    if (result) {
+      req.flash("successFlashMessage", `Assign Trainer successfully`);
+      res.redirect("/staff/trainerCourse");
+    }
+    req.flash("errorFlashMessage", `Assign Trainer failed`);
     res.redirect("/staff/trainerCourse");
   } catch (error) {
     console.log(error);
@@ -601,13 +625,20 @@ router.post("/assignTrainer", async (req, res) => {
 router.get("/removeTrainerCourse/:trainerId/:courseId", async (req, res) => {
   try {
     const { trainerId, courseId } = req.params;
-    // res.send(`trainerId: ${trainerId},courseId" ${courseId}`);
-    await TrainerCourse.destroy({
+    const removedTrainer = await TrainerCourse.destroy({
       where: {
         trainerId: trainerId,
         courseId: courseId,
       },
     });
+    if (removedTrainer) {
+      req.flash(
+        "successFlashMessage",
+        `Remove Trainer from Course successfully`
+      );
+      res.redirect("/staff/trainerCourse");
+    }
+    req.flash("errorFlashMessage", `Remove Trainer from Course failed`);
     res.redirect(`/staff/trainerCourse`);
   } catch (error) {
     console.log("Error");
@@ -638,6 +669,11 @@ router.post("/assignTrainee", async (req, res) => {
       traineeId,
       courseId,
     });
+    if (result) {
+      req.flash("successFlashMessage", `Assign Trainee successfully`);
+      res.redirect("/staff/traineeCourse");
+    }
+    req.flash("errorFlashMessage", `Assign Trainee failed`);
     res.redirect("/staff/traineeCourse");
   } catch (error) {
     console.log(error);
@@ -647,13 +683,20 @@ router.post("/assignTrainee", async (req, res) => {
 router.get("/removeTraineeCourse/:traineeId/:courseId", async (req, res) => {
   try {
     const { traineeId, courseId } = req.params;
-    // res.send(`trainerId: ${trainerId},courseId" ${courseId}`);
-    await TraineeCourse.destroy({
+    const removedTrainee = await TraineeCourse.destroy({
       where: {
         traineeId: traineeId,
         courseId: courseId,
       },
     });
+    if (removedTrainee) {
+      req.flash(
+        "successFlashMessage",
+        `Remove Trainee from Course successfully`
+      );
+      res.redirect("/staff/traineeCourse");
+    }
+    req.flash("errorFlashMessage", `Remove Trainee from Course failed`);
     res.redirect(`/staff/traineeCourse`);
   } catch (error) {
     console.log("Error");
