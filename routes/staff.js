@@ -2,7 +2,6 @@ var express = require("express");
 const session = require("express-session");
 var router = express.Router();
 const database = require("../database/models/index");
-const { Op } = require("sequelize");
 const Role = database.db.Role;
 const Account = database.db.Account;
 const Trainee = database.db.Trainee;
@@ -19,6 +18,7 @@ router.get("/", async function (req, res, next) {
       content: "../staff_view/staff_index",
       successFlashMessage: req.flash("successFlashMessage"),
       errorFlashMessage: req.flash("errorFlashMessage"),
+      name: req.session.user.username,
     });
   } catch (error) {
     console.log(error);
@@ -34,6 +34,7 @@ router.get("/trainee", async function (req, res, next) {
       trainees: trainees,
       successFlashMessage: req.flash("successFlashMessage"),
       errorFlashMessage: req.flash("errorFlashMessage"),
+      name: req.session.user.username,
     });
   } catch (error) {
     console.log(error);
@@ -52,6 +53,7 @@ router.get("/course", async function (req, res, next) {
       courses: courses,
       successFlashMessage: req.flash("successFlashMessage"),
       errorFlashMessage: req.flash("errorFlashMessage"),
+      name: req.session.user.username,
     });
   } catch (error) {
     console.log(error);
@@ -67,6 +69,7 @@ router.get("/category", async function (req, res, next) {
       categories: categories,
       successFlashMessage: req.flash("successFlashMessage"),
       errorFlashMessage: req.flash("errorFlashMessage"),
+      name: req.session.user.username,
     });
   } catch (error) {
     console.log(error);
@@ -84,6 +87,7 @@ router.get("/trainerCourse", async function (req, res, next) {
       trainerCourses: trainerCourses,
       successFlashMessage: req.flash("successFlashMessage"),
       errorFlashMessage: req.flash("errorFlashMessage"),
+      name: req.session.user.username,
     });
   } catch (error) {
     console.log(error);
@@ -101,6 +105,7 @@ router.get("/traineeCourse", async function (req, res, next) {
       traineeCourses: traineeCourses,
       successFlashMessage: req.flash("successFlashMessage"),
       errorFlashMessage: req.flash("errorFlashMessage"),
+      name: req.session.user.username,
     });
   } catch (error) {
     console.log(error);
@@ -169,6 +174,7 @@ router.get("/traineeAccount", async function (req, res) {
       content: "../account_view/traineeAccount_index",
       successFlashMessage: req.flash("successFlashMessage"),
       errorFlashMessage: req.flash("errorFlashMessage"),
+      name: req.session.user.username,
     });
   } catch (error) {
     console.log(error);
@@ -190,20 +196,8 @@ router.get("/viewAccount", async function (req, res, next) {
       accountDetail,
       successFlashMessage: req.flash("successFlashMessage"),
       errorFlashMessage: req.flash("errorFlashMessage"),
+      name: req.session.user.username,
     });
-  } catch (error) {
-    console.log(error);
-  }
-});
-
-router.post("/viewAccount_ajax", async function (req, res) {
-  try {
-    const { id } = req.query;
-    const account = await getAccountById(id);
-
-    const user = await getuserByRole(account.Role.name, account.userId);
-    const accountDetail = { ...account.dataValues, User: user };
-    return res.send(accountDetail);
   } catch (error) {
     console.log(error);
   }
@@ -246,6 +240,7 @@ router.get("/createTrainee", async function (req, res, next) {
     content: "../trainee_view/createTrainee",
     successFlashMessage: req.flash("successFlashMessage"),
     errorFlashMessage: req.flash("errorFlashMessage"),
+    name: req.session.user.username,
   });
 });
 
@@ -331,6 +326,7 @@ router.get("/updateTrainee/:updatedId", async function (req, res) {
       traineeData,
       successFlashMessage: req.flash("successFlashMessage"),
       errorFlashMessage: req.flash("errorFlashMessage"),
+      name: req.session.user.username,
     });
   } catch (error) {
     console.log(error);
@@ -390,6 +386,7 @@ router.get("/createCourse", async function (req, res, next) {
     categories: categories,
     successFlashMessage: req.flash("successFlashMessage"),
     errorFlashMessage: req.flash("errorFlashMessage"),
+    name: req.session.user.username,
   });
 });
 
@@ -448,11 +445,12 @@ router.get("/updateCourse/:updatedId", async function (req, res, next) {
     res.render("layouts/master", {
       content: "../course_view/updateCourse",
       id: id,
-      name: name,
+      courseName: name,
       descriptions: descriptions,
       categories: categories,
       successFlashMessage: req.flash("successFlashMessage"),
       errorFlashMessage: req.flash("errorFlashMessage"),
+      name: req.session.user.username,
     });
   } catch (error) {
     console.log(error);
@@ -460,12 +458,13 @@ router.get("/updateCourse/:updatedId", async function (req, res, next) {
 });
 
 router.post("/editCourse", async function (req, res, next) {
-  const { id, name, descriptions } = req.body;
+  const { id, name, descriptions, categoryId } = req.body;
   try {
     const updatedCourse = await Course.update(
       {
         name,
         descriptions,
+        categoryId,
       },
       {
         where: {
@@ -493,6 +492,7 @@ router.get("/createCategory", function (req, res, next) {
     content: "../category_view/createCategory",
     successFlashMessage: req.flash("successFlashMessage"),
     errorFlashMessage: req.flash("errorFlashMessage"),
+    name: req.session.user.username,
   });
 });
 
@@ -555,6 +555,7 @@ router.get("/updateCategory/:updatedId", async function (req, res, next) {
       descriptions: descriptions,
       successFlashMessage: req.flash("successFlashMessage"),
       errorFlashMessage: req.flash("errorFlashMessage"),
+      name: req.session.user.username,
     });
   } catch (error) {
     console.log(error);
@@ -598,6 +599,7 @@ router.get("/assignTrainer", async (req, res) => {
       courses,
       successFlashMessage: req.flash("successFlashMessage"),
       errorFlashMessage: req.flash("errorFlashMessage"),
+      name: req.session.user.username,
     });
   } catch (error) {
     console.log(error);
@@ -656,6 +658,7 @@ router.get("/assignTrainee", async (req, res) => {
       courses,
       successFlashMessage: req.flash("successFlashMessage"),
       errorFlashMessage: req.flash("errorFlashMessage"),
+      name: req.session.user.username,
     });
   } catch (error) {
     console.log(error);
@@ -701,6 +704,61 @@ router.get("/removeTraineeCourse/:traineeId/:courseId", async (req, res) => {
   } catch (error) {
     console.log("Error");
   }
+});
+
+/* ===================================== Search TRAINER - TRAINEE by COURSE ===================================== */
+
+router.get("/search", async function (req, res) {
+  res.render("layouts/master", {
+    content: "../search-by-course_view",
+    successFlashMessage: req.flash("successFlashMessage"),
+    errorFlashMessage: req.flash("errorFlashMessage"),
+    name: req.session.user.username,
+  });
+});
+router.post("/searchByCourse", async function (req, res) {
+  const { courseName } = req.body;
+  const trainers = await TrainerCourse.findAll({
+    include: [
+      {
+        model: Course,
+        attributes: ["name"],
+        where: {
+          name: courseName,
+        },
+      },
+      {
+        model: Trainer,
+        attributes: ["fullname", "email"],
+      },
+    ],
+    attributes: ["trainerId", "courseId"],
+  });
+
+  const trainees = await TraineeCourse.findAll({
+    include: [
+      {
+        model: Course,
+        attributes: ["name"],
+        where: {
+          name: courseName,
+        },
+      },
+      {
+        model: Trainee,
+        attributes: ["name", "email"],
+      },
+    ],
+    attributes: ["traineeId", "courseId"],
+  });
+  res.render("layouts/master", {
+    content: "../search_view/details",
+    trainers,
+    trainees,
+    successFlashMessage: req.flash("successFlashMessage"),
+    errorFlashMessage: req.flash("errorFlashMessage"),
+    name: req.session.user.username,
+  });
 });
 
 module.exports = router;

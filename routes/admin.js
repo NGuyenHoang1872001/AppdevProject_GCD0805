@@ -6,6 +6,7 @@ const Staff = database.db.Staff;
 const Role = database.db.Role;
 const Account = database.db.Account;
 const Trainer = database.db.Trainer;
+const Admin = database.db.Admin;
 
 /* GET Admin Index page. */
 router.get("/", async function (req, res, next) {
@@ -14,6 +15,7 @@ router.get("/", async function (req, res, next) {
       content: "../admin_view/admin_index",
       successFlashMessage: req.flash("successFlashMessage"),
       errorFlashMessage: req.flash("errorFlashMessage"),
+      name: req.session.user.username,
     });
   } catch (error) {
     console.log(error);
@@ -30,6 +32,7 @@ router.get("/staff", async function (req, res, next) {
       staffs: staffs,
       successFlashMessage: req.flash("successFlashMessage"),
       errorFlashMessage: req.flash("errorFlashMessage"),
+      name: req.session.user.username,
     });
   } catch (error) {
     console.log(error);
@@ -45,8 +48,54 @@ router.get("/trainer", async function (req, res, next) {
       trainers: trainers,
       successFlashMessage: req.flash("successFlashMessage"),
       errorFlashMessage: req.flash("errorFlashMessage"),
+      name: req.session.user.username,
     });
   } catch (error) {
+    console.log(error);
+  }
+});
+
+/* ======================== ADMIN ================================= */
+
+/* GET create Admin page. */
+router.get("/createAdmin", async function (req, res, next) {
+  const role = await Role.findOne({
+    where: {
+      name: "admin",
+    },
+  });
+
+  res.render("layouts/master", {
+    role,
+    content: "../admin_view/createAdmin",
+    successFlashMessage: req.flash("successFlashMessage"),
+    errorFlashMessage: req.flash("errorFlashMessage"),
+  });
+});
+
+/* POST add Training Staff page. */
+router.post("/addAdmin", async function (req, res, next) {
+  const { username, password, fullname, roleId } = req.body;
+  try {
+    const admin = await Admin.create({
+      fullname: fullname,
+    });
+    if (admin) {
+      await Account.create({
+        username: username,
+        password,
+        roleId,
+        userId: admin.dataValues.id,
+      });
+      req.flash(
+        "successFlashMessage",
+        `Create training staff ${admin.fullname} successfully`
+      );
+    }
+    res.redirect("/admin");
+  } catch (error) {
+    req.flash("errorFlashMessage", error);
+    console.log(session);
     console.log(error);
   }
 });
@@ -66,6 +115,7 @@ router.get("/createStaff", async function (req, res, next) {
     content: "../staff_view/createStaff",
     successFlashMessage: req.flash("successFlashMessage"),
     errorFlashMessage: req.flash("errorFlashMessage"),
+    name: req.session.user.username,
   });
 });
 
@@ -117,6 +167,7 @@ router.get("/createTrainer", async function (req, res, next) {
     content: "../trainer_view/createTrainer",
     successFlashMessage: req.flash("successFlashMessage"),
     errorFlashMessage: req.flash("errorFlashMessage"),
+    name: req.session.user.username,
   });
 });
 
@@ -242,6 +293,7 @@ router.get("/trainerAccount", async function (req, res) {
       content: "../account_view/trainerAccount_index",
       successFlashMessage: req.flash("successFlashMessage"),
       errorFlashMessage: req.flash("errorFlashMessage"),
+      name: req.session.user.username,
     });
   } catch (error) {
     console.log(error);
@@ -265,6 +317,7 @@ router.get("/staffAccount", async function (req, res) {
       content: "../account_view/staffAccount_index",
       successFlashMessage: req.flash("successFlashMessage"),
       errorFlashMessage: req.flash("errorFlashMessage"),
+      name: req.session.user.username,
     });
   } catch (error) {
     console.log(error);
@@ -290,6 +343,7 @@ router.get("/updateStaff/:updatedId", async function (req, res, next) {
       password,
       successFlashMessage: req.flash("successFlashMessage"),
       errorFlashMessage: req.flash("errorFlashMessage"),
+      name: req.session.user.username,
     });
   } catch (error) {
     console.log(error);
@@ -341,6 +395,7 @@ router.get("/updateTrainer/:updatedId", async function (req, res, next) {
       password,
       successFlashMessage: req.flash("successFlashMessage"),
       errorFlashMessage: req.flash("errorFlashMessage"),
+      name: req.session.user.username,
     });
   } catch (error) {
     console.log(error);
@@ -390,6 +445,7 @@ router.get("/viewTrainerAccount", async function (req, res, next) {
       accountDetail,
       successFlashMessage: req.flash("successFlashMessage"),
       errorFlashMessage: req.flash("errorFlashMessage"),
+      name: req.session.user.username,
     });
   } catch (error) {
     console.log(error);
@@ -410,6 +466,7 @@ router.get("/viewStaffAccount", async function (req, res, next) {
       accountDetail,
       successFlashMessage: req.flash("successFlashMessage"),
       errorFlashMessage: req.flash("errorFlashMessage"),
+      name: req.session.user.username,
     });
   } catch (error) {
     console.log(error);
