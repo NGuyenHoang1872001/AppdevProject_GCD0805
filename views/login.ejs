@@ -10,7 +10,7 @@
     <meta name="description" content="" />
     <meta name="author" content="" />
 
-    <title>FPT Education Management System - Login</title>
+    <title>SB Admin 2 - Login</title>
 
     <!-- Custom fonts for this template-->
     <link
@@ -24,7 +24,10 @@
     />
 
     <!-- Custom styles for this template-->
-    <link href="css/sb-admin-2.min.css" rel="stylesheet" />
+    <link
+      href="<%= process.env.BASE_URL %>css/sb-admin-2.min.css"
+      rel="stylesheet"
+    />
   </head>
 
   <body class="bg-gradient-primary">
@@ -36,20 +39,28 @@
             <div class="card-body p-0">
               <!-- Nested Row within Card Body -->
               <div class="row">
-                <div class="col-lg-6 d-none d-lg-block bg-login-image"></div>
-                <div class="col-lg-6">
+                <!-- <div class="col-lg-6 d-none d-lg-block bg-login-image"></div> -->
+                <div class="col-lg-12">
                   <div class="p-5">
                     <div class="text-center">
-                      <h1 class="h4 text-gray-900 mb-4">Welcome Back!</h1>
+                      <h1 class="h4 text-gray-900 mb-4">
+                        Wellcome to FPT Training System
+                      </h1>
                     </div>
-                    <form class="user">
+                    <form
+                      class="user"
+                      action="/authentication/login"
+                      method="POST"
+                    >
                       <div class="form-group">
                         <input
-                          type="email"
+                          type="text"
                           class="form-control form-control-user"
                           id="exampleInputEmail"
                           aria-describedby="emailHelp"
-                          placeholder="Enter Email Address..."
+                          placeholder="Username"
+                          name="username"
+                          required
                         />
                       </div>
                       <div class="form-group">
@@ -58,26 +69,16 @@
                           class="form-control form-control-user"
                           id="exampleInputPassword"
                           placeholder="Password"
+                          name="password"
+                          required
                         />
                       </div>
-                      <div class="form-group">
-                        <div class="custom-control custom-checkbox small">
-                          <input
-                            type="checkbox"
-                            class="custom-control-input"
-                            id="customCheck"
-                          />
-                          <label class="custom-control-label" for="customCheck"
-                            >Remember Me</label
-                          >
-                        </div>
-                      </div>
-                      <a
-                        href="index.html"
+                      <button
                         class="btn btn-primary btn-user btn-block"
+                        type="submit"
                       >
                         Login
-                      </a>
+                      </button>
                       <hr />
                       <a
                         href="index.html"
