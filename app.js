@@ -11,9 +11,11 @@ var indexRouter = require("./routes/index");
 var usersRouter = require("./routes/users");
 var adminRouter = require("./routes/admin");
 var staffRouter = require("./routes/staff");
+var trainerRouter = require("./routes/trainer");
 var authenticationRouter = require("./routes/authentication");
 const { adminVerify } = require("./middlewares/admin_authentication");
 const { staffVerify } = require("./middlewares/staff_authentication");
+const { trainerVerify } = require("./middlewares/trainer_authentication");
 
 require("dotenv").config();
 
@@ -40,9 +42,12 @@ app.use(express.static(path.join(__dirname, "public")));
 app.use(flash());
 app.use("/", indexRouter);
 app.use("/users", usersRouter);
+// app.use("/admin", adminRouter);
 app.use("/admin", adminVerify, adminRouter);
 app.use("/staff", staffVerify, staffRouter);
+// app.use("/staff", staffRouter);
 app.use("/authentication", authenticationRouter);
+app.use("/trainer", trainerVerify, trainerRouter);
 
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {
