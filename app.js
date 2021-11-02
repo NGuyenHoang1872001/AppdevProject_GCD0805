@@ -12,10 +12,12 @@ var usersRouter = require("./routes/users");
 var adminRouter = require("./routes/admin");
 var staffRouter = require("./routes/staff");
 var trainerRouter = require("./routes/trainer");
+var traineeRouter = require("./routes/trainee");
 var authenticationRouter = require("./routes/authentication");
 const { adminVerify } = require("./middlewares/admin_authentication");
 const { staffVerify } = require("./middlewares/staff_authentication");
 const { trainerVerify } = require("./middlewares/trainer_authentication");
+const { traineeVerify } = require("./middlewares/trainee_authentication");
 
 require("dotenv").config();
 
@@ -48,6 +50,7 @@ app.use("/staff", staffVerify, staffRouter);
 // app.use("/staff", staffRouter);
 app.use("/authentication", authenticationRouter);
 app.use("/trainer", trainerVerify, trainerRouter);
+app.use("/trainee", traineeVerify, traineeRouter);
 
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {
