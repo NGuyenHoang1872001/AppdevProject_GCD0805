@@ -34,19 +34,20 @@ router.get("/", async function (req, res, next) {
   }
 });
 
-router.get("/viewTraineeCourses/:courseId", async (req, res) => {
+router.get("/viewTraineeOnCourses/:courseId", async (req, res) => {
   const { courseId } = req.params;
-  const trainerCourses = await TrainerCourse.findAll({
-    include: Trainee,
-    where: {
-      courseId,
-    },
-  });
   const traineeCourses = await TraineeCourse.findAll({
     include: Trainee,
     where: {
       courseId,
     },
+  });
+  res.render("layouts/master", {
+    content: "../trainer_view/trainer_course_detail",
+    successFlashMessage: req.flash("successFlashMessage"),
+    errorFlashMessage: req.flash("errorFlashMessage"),
+    name: req.session.user.username,
+    traineeCourses,
   });
 });
 
