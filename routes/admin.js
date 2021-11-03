@@ -91,7 +91,7 @@ router.post("/addAdmin", async function (req, res, next) {
       });
       req.flash(
         "successFlashMessage",
-        `Create training staff ${admin.fullname} successfully`
+        `Create admin ${admin.fullname} successfully`
       );
     }
     res.redirect("/admin");
