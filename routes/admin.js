@@ -15,7 +15,7 @@ router.get("/", async function (req, res, next) {
       content: "../admin_view/admin_index",
       successFlashMessage: req.flash("successFlashMessage"),
       errorFlashMessage: req.flash("errorFlashMessage"),
-      name: req.session.user.username,
+      // name: req.session.user.username,
     });
   } catch (error) {
     console.log(error);
@@ -71,7 +71,7 @@ router.get("/createAdmin", async function (req, res, next) {
     content: "../admin_view/createAdmin",
     successFlashMessage: req.flash("successFlashMessage"),
     errorFlashMessage: req.flash("errorFlashMessage"),
-    name: req.session.user.username,
+    // name: req.session.user.username,
   });
 });
 
