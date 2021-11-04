@@ -2,14 +2,8 @@ var express = require("express");
 const session = require("express-session");
 var router = express.Router();
 const database = require("../database/models/index");
-const Staff = database.db.Staff;
-const Role = database.db.Role;
-const Account = database.db.Account;
-const Trainer = database.db.Trainer;
-const Admin = database.db.Admin;
 const Course = database.db.Course;
 const Trainee = database.db.Trainee;
-const TrainerCourse = database.db.TrainerCourse;
 const TraineeCourse = database.db.TraineeCourse;
 router.get("/", async function (req, res, next) {
   try {
@@ -23,6 +17,7 @@ router.get("/", async function (req, res, next) {
 
     res.render("layouts/master", {
       content: "../trainee_view/trainee_index",
+      sidebar: "../trainee_view/sidebar",
       successFlashMessage: req.flash("successFlashMessage"),
       errorFlashMessage: req.flash("errorFlashMessage"),
       name: req.session.user.username,
@@ -44,6 +39,7 @@ router.get("/viewTraineeProfile/:traineeId", async (req, res) => {
   });
   res.render("layouts/master", {
     content: "../trainee_view/trainee_profile",
+    sidebar: "../trainee_view/sidebar",
     successFlashMessage: req.flash("successFlashMessage"),
     errorFlashMessage: req.flash("errorFlashMessage"),
     name: req.session.user.username,

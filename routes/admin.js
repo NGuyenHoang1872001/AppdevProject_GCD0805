@@ -13,6 +13,7 @@ router.get("/", async function (req, res, next) {
   try {
     res.render("layouts/master", {
       content: "../admin_view/admin_index",
+      sidebar: "../admin_view/sidebar",
       successFlashMessage: req.flash("successFlashMessage"),
       errorFlashMessage: req.flash("errorFlashMessage"),
       name: req.session.user.username,
@@ -29,6 +30,7 @@ router.get("/staff", async function (req, res, next) {
     console.log("🚀 ~ file: admin.js ~ line 27 ~ staffs", staffs);
     res.render("layouts/master", {
       content: "../admin_view/admin-staff_index",
+      sidebar: "../admin_view/sidebar",
       staffs: staffs,
       successFlashMessage: req.flash("successFlashMessage"),
       errorFlashMessage: req.flash("errorFlashMessage"),
@@ -45,6 +47,7 @@ router.get("/trainer", async function (req, res, next) {
     const trainers = await Trainer.findAll();
     res.render("layouts/master", {
       content: "../admin_view/admin-trainer_index",
+      sidebar: "../admin_view/sidebar",
       trainers: trainers,
       successFlashMessage: req.flash("successFlashMessage"),
       errorFlashMessage: req.flash("errorFlashMessage"),
@@ -69,6 +72,7 @@ router.get("/createAdmin", async function (req, res, next) {
   res.render("layouts/master", {
     role,
     content: "../admin_view/createAdmin",
+    sidebar: "../admin_view/sidebar",
     successFlashMessage: req.flash("successFlashMessage"),
     errorFlashMessage: req.flash("errorFlashMessage"),
     name: req.session.user.username,
@@ -115,6 +119,7 @@ router.get("/createStaff", async function (req, res, next) {
   res.render("layouts/master", {
     role: role,
     content: "../staff_view/createStaff",
+    sidebar: "../admin_view/sidebar",
     successFlashMessage: req.flash("successFlashMessage"),
     errorFlashMessage: req.flash("errorFlashMessage"),
     name: req.session.user.username,
@@ -167,6 +172,7 @@ router.get("/createTrainer", async function (req, res, next) {
   res.render("layouts/master", {
     role: role,
     content: "../trainer_view/createTrainer",
+    sidebar: "../admin_view/sidebar",
     successFlashMessage: req.flash("successFlashMessage"),
     errorFlashMessage: req.flash("errorFlashMessage"),
     name: req.session.user.username,
@@ -293,6 +299,7 @@ router.get("/trainerAccount", async function (req, res) {
     res.render("layouts/master", {
       trainerAccounts: trainerAccounts,
       content: "../account_view/trainerAccount_index",
+      sidebar: "../admin_view/sidebar",
       successFlashMessage: req.flash("successFlashMessage"),
       errorFlashMessage: req.flash("errorFlashMessage"),
       name: req.session.user.username,
@@ -317,6 +324,7 @@ router.get("/staffAccount", async function (req, res) {
     res.render("layouts/master", {
       staffAccounts: staffAccounts,
       content: "../account_view/staffAccount_index",
+      sidebar: "../admin_view/sidebar",
       successFlashMessage: req.flash("successFlashMessage"),
       errorFlashMessage: req.flash("errorFlashMessage"),
       name: req.session.user.username,
@@ -340,6 +348,7 @@ router.get("/updateStaff/:updatedId", async function (req, res, next) {
     console.log("🚀 ~ file: admin.js ~ line 349 ~ trainer", staffAccount);
     res.render("layouts/master", {
       content: "../staff_view/updateStaff",
+      sidebar: "../admin_view/sidebar",
       id,
       username,
       password,
@@ -392,6 +401,7 @@ router.get("/updateTrainer/:updatedId", async function (req, res, next) {
     console.log("🚀 ~ file: admin.js ~ line 349 ~ trainer", trainerAccount);
     res.render("layouts/master", {
       content: "../trainer_view/updateTrainer",
+      sidebar: "../admin_view/sidebar",
       id,
       username,
       password,
@@ -444,6 +454,7 @@ router.get("/viewTrainerAccount", async function (req, res, next) {
 
     res.render("layouts/master", {
       content: "../trainer_view/details",
+      sidebar: "../admin_view/sidebar",
       accountDetail,
       successFlashMessage: req.flash("successFlashMessage"),
       errorFlashMessage: req.flash("errorFlashMessage"),
@@ -465,6 +476,7 @@ router.get("/viewStaffAccount", async function (req, res, next) {
     const accountDetail = { ...account.dataValues, User: user };
     res.render("layouts/master", {
       content: "../staff_view/details",
+      sidebar: "../admin_view/sidebar",
       accountDetail,
       successFlashMessage: req.flash("successFlashMessage"),
       errorFlashMessage: req.flash("errorFlashMessage"),

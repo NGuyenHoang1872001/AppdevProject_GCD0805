@@ -16,6 +16,7 @@ router.get("/", async function (req, res, next) {
   try {
     res.render("layouts/master", {
       content: "../staff_view/staff_index",
+      sidebar: "../staff_view/sidebar",
       successFlashMessage: req.flash("successFlashMessage"),
       errorFlashMessage: req.flash("errorFlashMessage"),
       name: req.session.user.username,
@@ -31,6 +32,7 @@ router.get("/trainee", async function (req, res, next) {
     const trainees = await Trainee.findAll();
     res.render("layouts/master", {
       content: "../staff_view/staff-trainee_index",
+      sidebar: "../staff_view/sidebar",
       trainees: trainees,
       successFlashMessage: req.flash("successFlashMessage"),
       errorFlashMessage: req.flash("errorFlashMessage"),
@@ -50,6 +52,7 @@ router.get("/course", async function (req, res, next) {
     });
     res.render("layouts/master", {
       content: "../staff_view/staff-course_index",
+      sidebar: "../staff_view/sidebar",
       courses: courses,
       successFlashMessage: req.flash("successFlashMessage"),
       errorFlashMessage: req.flash("errorFlashMessage"),
@@ -66,6 +69,7 @@ router.get("/category", async function (req, res, next) {
     const categories = await Course_Category.findAll();
     res.render("layouts/master", {
       content: "../staff_view/staff-category_index",
+      sidebar: "../staff_view/sidebar",
       categories: categories,
       successFlashMessage: req.flash("successFlashMessage"),
       errorFlashMessage: req.flash("errorFlashMessage"),
@@ -84,6 +88,7 @@ router.get("/trainerCourse", async function (req, res, next) {
     });
     res.render("layouts/master", {
       content: "../trainerCourse_view/trainerCourse_index",
+      sidebar: "../staff_view/sidebar",
       trainerCourses: trainerCourses,
       successFlashMessage: req.flash("successFlashMessage"),
       errorFlashMessage: req.flash("errorFlashMessage"),
@@ -102,6 +107,7 @@ router.get("/traineeCourse", async function (req, res, next) {
     });
     res.render("layouts/master", {
       content: "../traineeCourse_view/traineeCourse_index",
+      sidebar: "../staff_view/sidebar",
       traineeCourses: traineeCourses,
       successFlashMessage: req.flash("successFlashMessage"),
       errorFlashMessage: req.flash("errorFlashMessage"),
@@ -172,6 +178,7 @@ router.get("/traineeAccount", async function (req, res) {
     res.render("layouts/master", {
       traineeAccounts: traineeAccounts,
       content: "../account_view/traineeAccount_index",
+      sidebar: "../staff_view/sidebar",
       successFlashMessage: req.flash("successFlashMessage"),
       errorFlashMessage: req.flash("errorFlashMessage"),
       name: req.session.user.username,
@@ -193,6 +200,7 @@ router.get("/viewAccount", async function (req, res, next) {
     const accountDetail = { ...account.dataValues, User: user };
     res.render("layouts/master", {
       content: "../trainee_view/details",
+      sidebar: "../staff_view/sidebar",
       accountDetail,
       successFlashMessage: req.flash("successFlashMessage"),
       errorFlashMessage: req.flash("errorFlashMessage"),
@@ -238,6 +246,7 @@ router.get("/createTrainee", async function (req, res, next) {
   res.render("layouts/master", {
     role: role,
     content: "../trainee_view/createTrainee",
+    sidebar: "../staff_view/sidebar",
     successFlashMessage: req.flash("successFlashMessage"),
     errorFlashMessage: req.flash("errorFlashMessage"),
     name: req.session.user.username,
@@ -383,6 +392,7 @@ router.get("/createCourse", async function (req, res, next) {
 
   res.render("layouts/master", {
     content: "../course_view/createCourse",
+    sidebar: "../staff_view/sidebar",
     categories: categories,
     successFlashMessage: req.flash("successFlashMessage"),
     errorFlashMessage: req.flash("errorFlashMessage"),
@@ -444,6 +454,7 @@ router.get("/updateCourse/:updatedId", async function (req, res, next) {
     const { id, name, descriptions } = course[0].dataValues;
     res.render("layouts/master", {
       content: "../course_view/updateCourse",
+      sidebar: "../staff_view/sidebar",
       id: id,
       courseName: name,
       descriptions: descriptions,
@@ -490,6 +501,7 @@ router.post("/editCourse", async function (req, res, next) {
 router.get("/createCategory", function (req, res, next) {
   res.render("layouts/master", {
     content: "../category_view/createCategory",
+    sidebar: "../staff_view/sidebar",
     successFlashMessage: req.flash("successFlashMessage"),
     errorFlashMessage: req.flash("errorFlashMessage"),
     name: req.session.user.username,
@@ -550,6 +562,7 @@ router.get("/updateCategory/:updatedId", async function (req, res, next) {
     const { id, name, descriptions } = category[0].dataValues;
     res.render("layouts/master", {
       content: "../category_view/updateCategory",
+      sidebar: "../staff_view/sidebar",
       id: id,
       name: name,
       descriptions: descriptions,
@@ -595,6 +608,7 @@ router.get("/assignTrainer", async (req, res) => {
     const courses = await Course.findAll();
     res.render("layouts/master", {
       content: "../trainer_view/assignTrainer",
+      sidebar: "../staff_view/sidebar",
       trainers,
       courses,
       successFlashMessage: req.flash("successFlashMessage"),
@@ -654,6 +668,7 @@ router.get("/assignTrainee", async (req, res) => {
     const courses = await Course.findAll();
     res.render("layouts/master", {
       content: "../trainee_view/assignTrainee",
+      sidebar: "../staff_view/sidebar",
       trainees,
       courses,
       successFlashMessage: req.flash("successFlashMessage"),
@@ -711,6 +726,7 @@ router.get("/removeTraineeCourse/:traineeId/:courseId", async (req, res) => {
 router.get("/search", async function (req, res) {
   res.render("layouts/master", {
     content: "../search-by-course_view",
+    sidebar: "../staff_view/sidebar",
     successFlashMessage: req.flash("successFlashMessage"),
     errorFlashMessage: req.flash("errorFlashMessage"),
     name: req.session.user.username,
@@ -753,6 +769,7 @@ router.post("/searchByCourse", async function (req, res) {
   });
   res.render("layouts/master", {
     content: "../search_view/details",
+    sidebar: "../staff_view/sidebar",
     trainers,
     trainees,
     successFlashMessage: req.flash("successFlashMessage"),

@@ -23,6 +23,7 @@ router.get("/", async function (req, res, next) {
 
     res.render("layouts/master", {
       content: "../trainer_view/trainer_index",
+      sidebar: "../trainer_view/sidebar",
       successFlashMessage: req.flash("successFlashMessage"),
       errorFlashMessage: req.flash("errorFlashMessage"),
       name: req.session.user.username,
@@ -42,8 +43,13 @@ router.get("/viewTraineeOnCourses/:courseId", async (req, res) => {
       courseId,
     },
   });
+  console.log(
+    "🚀 ~ file: trainer.js ~ line 45 ~ router.get ~ traineeCourses",
+    traineeCourses
+  );
   res.render("layouts/master", {
     content: "../trainer_view/trainer_course_detail",
+    sidebar: "../trainer_view/sidebar",
     successFlashMessage: req.flash("successFlashMessage"),
     errorFlashMessage: req.flash("errorFlashMessage"),
     name: req.session.user.username,
@@ -62,6 +68,7 @@ router.get("/updatetrainer/:trainerId", async function (req, res, next) {
 
     res.render("layouts/master", {
       content: "../trainer_view/updateTrainerCourse",
+      sidebar: "../trainer_view/sidebar",
       trainer,
       successFlashMessage: req.flash("successFlashMessage"),
       errorFlashMessage: req.flash("errorFlashMessage"),

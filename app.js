@@ -18,7 +18,6 @@ const { adminVerify } = require("./middlewares/admin_authentication");
 const { staffVerify } = require("./middlewares/staff_authentication");
 const { trainerVerify } = require("./middlewares/trainer_authentication");
 const { traineeVerify } = require("./middlewares/trainee_authentication");
-
 require("dotenv").config();
 
 var app = express();
