@@ -723,15 +723,6 @@ router.get("/removeTraineeCourse/:traineeId/:courseId", async (req, res) => {
 
 /* ===================================== Search TRAINER - TRAINEE by COURSE ===================================== */
 
-router.get("/search", async function (req, res) {
-  res.render("layouts/master", {
-    content: "../search-by-course_view",
-    sidebar: "../staff_view/sidebar",
-    successFlashMessage: req.flash("successFlashMessage"),
-    errorFlashMessage: req.flash("errorFlashMessage"),
-    name: req.session.user.username,
-  });
-});
 router.post("/searchByCourse", async function (req, res) {
   const { courseName } = req.body;
   const trainers = await TrainerCourse.findAll({

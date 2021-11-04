@@ -3,35 +3,34 @@
   rel="stylesheet"
   href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.13.0/css/all.min.css"
 />
-<h1>Assign Trainer</h1>
+<h1 style="text-align: center">Assign Trainer</h1>
 <div class="container">
   <form action="/staff/assignTrainer" method="POST">
     <div class="mb-3">
       <label for="exampleInputEmail1" class="form-label">Trainer</label>
       <select
-      class="form-control"
-      id="exampleFormControlSelect1"
-      name="trainerId"
-    >
-      <% trainers.forEach(function(trainer) { %>
-      <option value="<%= trainer.id %>"><%= trainer.fullname %></option>
-      <% }); %>
-    </select>
+        class="form-control"
+        id="exampleFormControlSelect1"
+        name="trainerId"
+      >
+        <% trainers.forEach(function(trainer) { %>
+        <option value="<%= trainer.id %>"><%= trainer.fullname %></option>
+        <% }); %>
+      </select>
     </div>
 
     <div class="mb-3">
       <label for="password" class="form-label">Course</label>
       <select
-      class="form-control"
-      id="exampleFormControlSelect1"
-      name="courseId"
-    >
-      <% courses.forEach(function(course) { %>
-      <option value="<%= course.id %>"><%= course.name %></option>
-      <% }); %>
-    </select>
+        class="form-control"
+        id="exampleFormControlSelect1"
+        name="courseId"
+      >
+        <% courses.forEach(function(course) { %>
+        <option value="<%= course.id %>"><%= course.name %></option>
+        <% }); %>
+      </select>
     </div>
-
 
     <button type="submit" class="btn btn-primary">
       <i class="fas fa-check-circle"></i> Create
