@@ -64,14 +64,14 @@ router.get("/createAdmin", async function (req, res, next) {
       name: "admin",
     },
   });
-  // const name = req.session.user.username;
+  //const name = req.session.user.username;
 
   res.render("layouts/master", {
     role,
     content: "../admin_view/createAdmin",
     successFlashMessage: req.flash("successFlashMessage"),
     errorFlashMessage: req.flash("errorFlashMessage"),
-    // name,
+    name: req.session.user.username,
   });
 });
 
@@ -91,7 +91,7 @@ router.post("/addAdmin", async function (req, res, next) {
       });
       req.flash(
         "successFlashMessage",
-        `Create training staff ${admin.fullname} successfully`
+        `Create admin ${admin.fullname} successfully`
       );
     }
     res.redirect("/admin");
